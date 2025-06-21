@@ -1,43 +1,17 @@
-import dotenv from 'dotenv';
-dotenv.config();
-import http from 'http';
-import { callGoogleMapAPI } from './Service/mixBService.js';
-import url from 'url';
-import { openAIController } from './controller/openAIController.js';
-// TODO: I would like to just return the api response. do not do anything in this api.
-const AllowedIps = process.env.ALLOWED_IPS?.split(',');
-const cache = new Map();
-const server = http.createServer(async (req, res) => {
-    const clientIp = req?.socket?.remoteAddress?.split(':')?.pop()?.split('%').shift();
-    const parsedUrl = url.parse(req?.url, true);
-    // IPが許可リストにない場合、403で拒否
-    if (!AllowedIps?.includes(clientIp)) {
-        console.error(AllowedIps);
-        console.error('アクセス元IP:', clientIp);
-        res.statusCode = 403;
-        res.end(`Access Denied: ${clientIp}`);
-        return;
-    }
-    const path = parsedUrl.pathname;
-    try {
-        if (path === '/check' || path === '/mix-B/check') {
-            callGoogleMapAPI(req, res, parsedUrl, cache);
-        }
-        else if (path?.startsWith('/openAI/')) {
-            await openAIController(req, res, parsedUrl);
-        }
-        else {
-            res.writeHead(404, { 'Content-Type': 'text/plain' });
-            res.end('エンドポイントが見つかりません。');
-        }
-    }
-    catch (error) {
-        console.error(error);
-        res.writeHead(500, { 'Content-Type': 'text/plain' });
-        res.end('エラーが発生しました。');
-    }
-});
-server.listen(process.env.PORT || 8080, () => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("dotenv/config");
+const core_1 = require("@nestjs/core");
+const app_module_1 = require("./app.module");
+const config_1 = require("@nestjs/config");
+async function bootstrap() {
+    const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    const configService = app.get(config_1.ConfigService);
+    const port = configService.get('PORT') || 8080;
+    await app.listen(port);
+    console.log(`Server started on port ${port}`);
     console.log('サーバー起動中: curl "https://my-tools-leebgt5xxa-an.a.run.app/check?origin=holborn&destination=harods&maxMinutes=35&transit_mode=train"');
     console.log('サーバー起動中: curl "localhost:8080/check?origin=holborn&destination=harods&maxMinutes=35&transit_mode=train"');
-});
+}
+bootstrap();
+//# sourceMappingURL=main.js.map

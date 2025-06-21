@@ -1,4 +1,4 @@
-function getUnixTimeAtHour(hour, minute) {
+export function getUnixTimeAtHour(hour: number, minute: number): number {
     const now = new Date();
     const departure = new Date(
         now.getFullYear(),
@@ -9,6 +9,4 @@ function getUnixTimeAtHour(hour, minute) {
         0
     );
     return Math.floor(departure.getTime() / 1000);
-}
-
-export {getUnixTimeAtHour};
+} 
