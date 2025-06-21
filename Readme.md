@@ -1,8 +1,8 @@
-# how to
+# memo: how to
 
 https://chatgpt.com/c/6819c0b0-0fe8-8013-a1f2-ebc883bea0c6
 
-# initial environment memo
+# memo: initial environment
 
 ## Prerequisite
 
@@ -41,7 +41,7 @@ https://console.cloud.google.com/iam-admin/iam?hl=ja&inv=1&invt=AbwpvQ&project=m
     --allow-unauthenticated
 ```
 
-# Dploy codesk
+# Deploy codes
 
 ```bash
     gcloud builds submit --tag gcr.io/my-tools-459008/my-tools
