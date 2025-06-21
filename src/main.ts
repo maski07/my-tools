@@ -17,6 +17,16 @@ const server = http.createServer(async (req: IncomingMessage, res: ServerRespons
 
     const clientIp = req?.socket?.remoteAddress?.split(':')?.pop()?.split('%').shift();
     const parsedUrl = url.parse(req?.url as string, true);
+
+    const path = parsedUrl.pathname;
+
+    // Health check endpoint - no IP restriction
+    if (path === '/') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'ok', timestamp: new Date().toISOString() }));
+        return;
+    }
+
     // IPが許可リストにない場合、403で拒否
     if (!AllowedIps?.includes(clientIp as string)) {
         console.error(AllowedIps);
@@ -25,8 +35,6 @@ const server = http.createServer(async (req: IncomingMessage, res: ServerRespons
         res.end(`Access Denied: ${clientIp}`);
         return;
     }
-
-    const path = parsedUrl.pathname;
 
     try {
         if (path === '/check' || path === '/mix-B/check') {
@@ -45,6 +53,7 @@ const server = http.createServer(async (req: IncomingMessage, res: ServerRespons
 });
 
 server.listen(process.env.PORT || 8080, () => {
+    console.log(`Server started on port ${process.env.PORT || 8080}`);
     console.log('サーバー起動中: curl "https://my-tools-leebgt5xxa-an.a.run.app/check?origin=holborn&destination=harods&maxMinutes=35&transit_mode=train"');
     console.log('サーバー起動中: curl "localhost:8080/check?origin=holborn&destination=harods&maxMinutes=35&transit_mode=train"');
 });
