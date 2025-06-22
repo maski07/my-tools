@@ -1,5 +1,3 @@
-
-
 ## mixb-api
 - for the local pc
   curl "http://localhost:8080/mix-b/check?origin=holborn&destination=harods&maxMinutes=35&transit_mode=train"
@@ -18,3 +16,32 @@
     curl -X POST "https://my-tools-leebgt5xxa-an.a.run.app/open-ai/chat" \
      -H "Content-Type: application/json" \
      -d '{"system":"You are a helpful assistant","user":"Hello, how are you?","temperature":0.7,"maxTokens":150,"topP":1,"presencePenalty":0,"frequencyPenalty":0,"responseFormat":"text"}'
+
+## Jobs API (Sponsorship Authority)
+
+- for the local pc
+  curl -X POST "http://localhost:8080/jobs/check-authority" \
+  -H "Content-Type: application/json" \
+  -d '{"companyNames": ["McMullan Shellfish", "ABOUTCARE HASTINGS LTD"]}'
+
+- for the google cloud run
+  curl -X POST "https://my-tools-leebgt5xxa-an.a.run.app/jobs/check-authority" \
+  -H "Content-Type: application/json" \
+  -d '{"companyNames": ["McMullan Shellfish", "ABOUTCARE HASTINGS LTD"]}'
+
+### Test Examples
+
+- Partial matching (returns multiple results):
+  curl -X POST "http://localhost:8080/jobs/check-authority" \
+  -H "Content-Type: application/json" \
+  -d '{"companyNames": ["McMullan", "Shellfish"]}'
+
+- Exact matching:
+  curl -X POST "http://localhost:8080/jobs/check-authority" \
+  -H "Content-Type: application/json" \
+  -d '{"companyNames": ["McMullan Shellfish"]}'
+
+- Validation error (duplicate names):
+  curl -X POST "http://localhost:8080/jobs/check-authority" \
+  -H "Content-Type: application/json" \
+  -d '{"companyNames": ["McMullan Shellfish", "McMullan Shellfish"]}'
