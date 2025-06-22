@@ -44,13 +44,7 @@ https://console.cloud.google.com/iam-admin/iam?hl=ja&inv=1&invt=AbwpvQ&project=m
 # Deploy codes
 
 ```bash
-    gcloud builds submit --tag gcr.io/my-tools-459008/my-tools
-    gcloud run deploy my-tools \
-      --image gcr.io/my-tools-459008/my-tools \
-      --platform managed \
-      --region asia-northeast1 \
-      --set-env-vars ALLOWED_IPS={YOUR_IP_ADRESSES},GOOGLE_MAP_API_KEY={API_KEY}
-     --allow-unauthenticated
+  sh deploy.sh
 ```
 
 # get log
