@@ -1,12 +1,6 @@
 import { Controller, Get, Post, Body, Query, BadRequestException } from '@nestjs/common';
 import { MixBService } from './mix-b.service';
 
-interface TransitRequest {
-    origin: string;
-    destination: string;
-    maxMinutes: number;
-}
-
 @Controller()
 export class MixBController {
     constructor(private readonly mixBService: MixBService) { }
