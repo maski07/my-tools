@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Body, Query, BadRequestException } from '@nestjs/common';
 import { MixBService } from './mix-b.service';
 
-@Controller()
+@Controller('mix-b')
 export class MixBController {
     constructor(private readonly mixBService: MixBService) { }
 
-    @Get(['check', 'mix-B/check'])
+    @Get('check')
     async checkTransitTimeGet(
         @Query('origin') origin: string,
         @Query('destination') destination: string,

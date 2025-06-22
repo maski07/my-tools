@@ -1,7 +1,7 @@
 import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
 import { OpenAIService, ChatOptions } from './openai.service';
 
-@Controller('openAI')
+@Controller('open-ai')
 export class OpenAIController {
     constructor(private readonly openAIService: OpenAIService) { }
 
