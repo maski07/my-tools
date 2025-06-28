@@ -29,7 +29,7 @@ export function createCompanyNameRegexFiltering(companyName: string): RegExp {
     const escapedName = companyName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
     // Create a pattern that matches the company name as a word boundary
-    return new RegExp(`\\s${escapedName}\\s`, 'gi');
+    return new RegExp(`^${escapedName}(?=\\s|$)`, 'gi');
 }
 
 /**
@@ -52,16 +52,16 @@ export function findMatchingCompany(inputName: string, cachedCompanies: Set<stri
 
     return matchingCompanies;
 }
+
 export function findMatchingCompanies(companyNames: string[], cachedCompanies: Set<string>): string[] {
     const allMatchingCompanies: string[] = [];
 
     for (const companyName of companyNames) {
-        const matchingCompanies = findMatchingCompany(companyName, this.cachedCompanies);
+        const matchingCompanies = findMatchingCompany(companyName, cachedCompanies);
         allMatchingCompanies.push(...matchingCompanies);
     }
     return allMatchingCompanies;
 }
-
 
 /**
  * Normalizes an array of company names
