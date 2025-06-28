@@ -20,7 +20,7 @@ export function normalizeCompanyName(companyName: string): string {
  * - Escapes special regex characters
  * - Creates a pattern that matches the company name as a word boundary
  */
-export function createCompanyNameRegex(companyName: string): RegExp {
+export function createCompanyNameRegexFiltering(companyName: string): RegExp {
     if (!companyName || typeof companyName !== 'string') {
         return new RegExp('', 'g');
     }
@@ -29,13 +29,13 @@ export function createCompanyNameRegex(companyName: string): RegExp {
     const escapedName = companyName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
     // Create a pattern that matches the company name as a word boundary
-    return new RegExp(`\\b${escapedName}\\b`, 'gi');
+    return new RegExp(`\\s${escapedName}\\s`, 'gi');
 }
 
 /**
  * Finds all matching companies using regex pattern matching
  */
-export function findMatchingCompanies(inputName: string, cachedCompanies: Set<string>): string[] {
+export function findMatchingCompany(inputName: string, cachedCompanies: Set<string>): string[] {
     if (!inputName || !cachedCompanies) {
         return [];
     }
@@ -44,7 +44,7 @@ export function findMatchingCompanies(inputName: string, cachedCompanies: Set<st
     const matchingCompanies: string[] = [];
 
     for (const cachedCompany of cachedCompanies) {
-        const regex = createCompanyNameRegex(normalizedInput);
+        const regex = createCompanyNameRegexFiltering(normalizedInput);
         if (regex.test(cachedCompany)) {
             matchingCompanies.push(cachedCompany);
         }
@@ -52,6 +52,16 @@ export function findMatchingCompanies(inputName: string, cachedCompanies: Set<st
 
     return matchingCompanies;
 }
+export function findMatchingCompanies(companyNames: string[], cachedCompanies: Set<string>): string[] {
+    const allMatchingCompanies: string[] = [];
+
+    for (const companyName of companyNames) {
+        const matchingCompanies = findMatchingCompany(companyName, this.cachedCompanies);
+        allMatchingCompanies.push(...matchingCompanies);
+    }
+    return allMatchingCompanies;
+}
+
 
 /**
  * Normalizes an array of company names
