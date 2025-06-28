@@ -10,5 +10,8 @@ async function bootstrap() {
     console.log('サーバー起動中 local: curl "localhost:8080/check?origin=holborn&destination=harods&maxMinutes=35&transit_mode=train"');
 }
 
-bootstrap();
+bootstrap().catch(error => {
+    console.error('❌ Failed to start application:', error);
+    process.exit(1);
+});
 

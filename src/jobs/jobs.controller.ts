@@ -4,7 +4,7 @@ import { JobsValidator, CheckSponsorshipDto } from './jobs.validator';
 import { CommonExceptionFilter } from '../utils/exception.filter';
 
 export class SponsorshipResponse {
-    authorizedCompanies: string[];
+    companyNames: string[];
     totalChecked: number;
     totalAuthorized: number;
 }
@@ -24,14 +24,14 @@ export class JobsController {
         // Validate input using the validator
         this.jobsValidator.validateCheckSponsorshipInput(body);
 
-        const authorizedCompanies = await this.jobsService.checkSponsorshipAuthority(
+        const companyNames = await this.jobsService.checkSponsorshipAuthority(
             body.companyNames
         );
 
         return {
-            authorizedCompanies,
+            companyNames,
             totalChecked: body.companyNames.length,
-            totalAuthorized: authorizedCompanies.length
+            totalAuthorized: companyNames.length
         };
     }
 } 

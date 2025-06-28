@@ -5,7 +5,8 @@
   "main": "dist/main.js",
   "scripts": {
     "dev": "nest start --watch",
-    "start": "nest start",
+    "start": "npm run build && node dist/main.js",
+    "start:prod": "node dist/main.js",
     "build": "nest build",
     "watch": "nest build --watch",
     "test": "jest",
