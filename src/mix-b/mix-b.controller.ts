@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Query, BadRequestException } from '@nestjs/common';
-import { MixBService } from './mix-b.service';
+import { MixBService, TransitResult } from './mix-b.service';
 
 @Controller('mix-b')
 export class MixBController {
@@ -21,12 +21,13 @@ export class MixBController {
         }
 
         try {
-            const result = await this.mixBService.checkTransitTime({
+            const req = {
                 origin,
                 destination,
                 maxMinutes: maxMinutesNum
-            });
-            return result;
+            };
+            const result: TransitResult = await this.mixBService.checkTransitTime(req);
+            return {...req, ...result};
         } catch (error) {
             throw new BadRequestException(error.message);
         }
