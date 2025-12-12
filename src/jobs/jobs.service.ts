@@ -18,15 +18,21 @@ export class JobsService {
     private readonly logger = new Logger(JobsService.name);
     private cachedCompanies: Set<string> = new Set();
     private isDataLoaded = false;
+    private companies: SponsorshipCompany[];
     private readonly cloudBacketFileUrl = 'https://storage.googleapis.com/my-tools-459008_cloudbuild/files/2025-06-16_-_Worker_and_Temporary_Worker.csv';
     constructor() {
         this.loadSponsorshipData();
     }
 
+    public async getSponsorshipData(): Promise<{companyName: string}[]> {
+        if(!this.isDataLoaded) {
+            await this.loadSponsorshipData();
+        }
+        return this.companies.map(x => ({ companyName: x.organisationName })); 
+    }
+
     private async loadSponsorshipData(): Promise<void> {
         this.logger.log(`Loading sponsorship data from: ${this.cloudBacketFileUrl}`);
-
-        const companies: SponsorshipCompany[] = [];
 
         return new Promise((resolve, reject) => {
             axios.get(this.cloudBacketFileUrl, { responseType: 'stream' })
@@ -34,7 +40,7 @@ export class JobsService {
                     response.data
                         .pipe(csv())
                         .on('data', (row) => {
-                            companies.push({
+                            this.companies.push({
                                 organisationName: row['Organisation Name'] || '',
                                 townCity: row['Town/City']?.trim() || '',
                                 county: row['County']?.trim() || '',
@@ -45,7 +51,7 @@ export class JobsService {
                         .on('end', () => {
                             // Create a set of company names for efficient lookup
                             this.cachedCompanies = new Set(
-                                companies
+                                this.companies
                                     .map(company => company.organisationName)
                                     .filter(name => name && name.length > 0)
                             );
