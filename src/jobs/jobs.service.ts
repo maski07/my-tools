@@ -18,7 +18,7 @@ export class JobsService {
     private readonly logger = new Logger(JobsService.name);
     private cachedCompanies: Set<string> = new Set();
     private isDataLoaded = false;
-    private companies: SponsorshipCompany[];
+    private companies: SponsorshipCompany[] = [];
     private readonly cloudBacketFileUrl = 'https://storage.googleapis.com/my-tools-459008_cloudbuild/files/2025-06-16_-_Worker_and_Temporary_Worker.csv';
     constructor() {
         this.loadSponsorshipData();
